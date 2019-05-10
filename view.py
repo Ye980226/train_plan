@@ -14,7 +14,7 @@ app = Flask(__name__)
 
 plt.switch_backend('agg')
 SRC = "src"
-plt.rcParams['font.sans-serif'] = ['FangSong']  # 指定默认字体
+plt.rcParams['font.sans-serif'] = ['SimHei']  # 指定默认字体
 plt.rcParams['axes.unicode_minus'] = False  # 解决保存图像是负号'-'显示为方块的问题
 df_dict = {}
 
