@@ -77,8 +77,8 @@ def upload():
     if request.method == 'POST':
         f = request.files["file"]
         base_path = os.path.abspath(os.path.dirname(__file__))
-        upload_path = os.path.join(base_path, "static", "uploads")
-        file_name = upload_path + secure_filename(f.filename)
+        upload_path = os.path.join(base_path, "static/uploads")
+        file_name = upload_path + "/" + secure_filename(f.filename)
 
         f.save(file_name)
         return redirect(url_for('upload'))
