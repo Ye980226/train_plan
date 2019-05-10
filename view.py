@@ -21,7 +21,7 @@ df_dict = {}
 
 @app.route('/')
 def hello():
-    df = pd.read_excel("train.xlsx")
+    df = pd.read_excel("./static/uploads/train.xlsx")
 
     df = df.dropna()
     df = df.applymap(lambda x: json.loads(x))
