@@ -12,7 +12,7 @@ from flask import Flask, request, make_response, render_template, redirect, url_
 from werkzeug.utils import secure_filename  # 使用这个是为了确保filename是安全的
 app = Flask(__name__)
 
-
+plt.switch_backend('agg')
 SRC = "src"
 plt.rcParams['font.sans-serif'] = ['FangSong']  # 指定默认字体
 plt.rcParams['axes.unicode_minus'] = False  # 解决保存图像是负号'-'显示为方块的问题
@@ -91,4 +91,4 @@ def show():
 
 
 if __name__ == '__main__':
-    app.run(host="0.0.0.0", port=9999)
+    app.run(host="0.0.0.0", port=9999, debug=True)
