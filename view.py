@@ -1,8 +1,10 @@
 
+import shutil
 import pandas as pd
 import json
 import re
 import os
+import matplotlib
 import matplotlib.pyplot as plt
 import glob
 from io import BytesIO
@@ -14,7 +16,7 @@ app = Flask(__name__)
 
 plt.switch_backend('agg')
 SRC = "src"
-plt.rcParams['font.sans-serif'] = ['SimHei']  # 指定默认字体
+myfont = matplotlib.font_manager.FontProperties(fname="simhei.ttf")
 plt.rcParams['axes.unicode_minus'] = False  # 解决保存图像是负号'-'显示为方块的问题
 df_dict = {}
 
@@ -28,7 +30,9 @@ def hello():
     columns = re.search(r"(\[.*?\])", df.columns[0]).group(1)
     species = columns.replace("[", "").replace("]", "").split(",")
     length = len(species)
+    if os.path.exists(SRC):
 
+        shutil.rmtree(SRC)
     for i in range(length):
         df_dict[species[i]] = df.applymap(lambda x: x[i])
         df_dict[species[i]].columns = list(
@@ -38,10 +42,12 @@ def hello():
 
             os.mkdir(SRC)
         for index in set(df_dict[species[i]].index):
-            df_dict[species[i]].loc[index].plot(figsize=(15, 7))
+            df_dict[species[i]].loc[index].plot(
+                figsize=(15, 7))
+            plt.legend(df_dict[species[i]].loc[index].columns,
+                       prop=myfont)
+            # plt.title(index+"_"+species[i], fontproperties=myfont)
             plt.savefig(os.path.join(SRC, index+"_"+species[i]+".jpg"))
-
-    context = {}
 
     files = glob.glob("./src/*")
     # width = 2
@@ -51,7 +57,7 @@ def hello():
         ax = plt.subplot(length, 1, i+1)
 
         plt.title(files[i].replace(
-            "./src\\", " ").replace(".jpg", ""))
+            "./src\\", " ").replace(".jpg", ""), fontproperties=myfont)
 
         plt.imshow(Image.open(files[i]))
     plt.subplots_adjust(bottom=0.2,
