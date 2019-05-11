@@ -73,7 +73,7 @@ def hello():
         # b64encode是编码，b64decode是解码
         data = base64.b64encode(f.read()).decode()
         # base64.b64decode(base64data)
-        print(data)
+        # print(data)
 
     html = '''
        <html>
