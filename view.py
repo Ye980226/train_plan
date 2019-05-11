@@ -46,26 +46,34 @@ def hello():
                 figsize=(15, 7))
             plt.legend(df_dict[species[i]].loc[index].columns,
                        prop=myfont)
-            # plt.title(index+"_"+species[i], fontproperties=myfont)
+            plt.title(index+"_"+species[i], fontproperties=myfont)
             plt.savefig(os.path.join(SRC, index+"_"+species[i]+".jpg"))
 
     files = glob.glob("./src/*")
     # width = 2
     length = len(files)
-    plt.figure(figsize=(15, 7*length), dpi=2**8)
-    for i in range(len(files)):
-        ax = plt.subplot(length, 1, i+1)
+    ims = [Image.open(file) for file in files]
+    width, height = ims[0].size
+    result = Image.new(ims[0].mode, (width, height * length))
+    for i,im in enumerate(ims):
+        result.paste(im, box=(0, i * height))
+    
+    # plt.figure(figsize=(15, 7*length), dpi=2**7)
+    # for i in range(len(files)):
+        # ax = plt.subplot(length, 1, i+1)
 
-        plt.title(files[i].replace(
-            "./src\\", " ").replace(".jpg", ""), fontproperties=myfont)
+        # plt.title(files[i].replace(
+            # "./src\\", " ").replace(".jpg", ""), fontproperties=myfont)
 
-        plt.imshow(Image.open(files[i]))
-    plt.subplots_adjust(bottom=0.2,
-                        top=0.8)
-
-    sio = BytesIO()
-    plt.savefig(sio, format='png')
-    data = base64.encodebytes(sio.getvalue()).decode()
+        # plt.imshow(Image.open(files[i]))
+    # plt.subplots_adjust(bottom=0.2,
+                        # top=0.8)
+    result.save("output.png")
+    with open("output.png", "rb") as f:
+        # b64encode是编码，b64decode是解码
+        data = base64.b64encode(f.read()).decode()
+        # base64.b64decode(base64data)
+        print(data)
 
     html = '''
        <html>
